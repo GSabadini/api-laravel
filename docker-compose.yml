@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    volumes:
+      - './storage/app/postgres/data:/var/lib/postgresql/data'
+    environment:
+      - POSTGRES_DB=devsquad
+      - POSTGRES_USER=devsquad
+      - POSTGRES_PASSWORD=devsquad
+    ports:
+      - '5432:5432'
+
+  devapp:
+    depends_on:
+      - postgres
+    image: ambientum/php:7.2-nginx
+    volumes:
+      - '.:/var/www/app'
+    links:
+      - postgres
+    ports:
+      - '8081:8080'
+
+  # queue:
+  #   image: 'carlosfiori/php7.1-nginx'
+  #   restart: always
+  #   command: php artisan queue:work --tries=5
+  #   volumes:
+  #     - './:/var/www/app'
+  #   links:
+  #     - postgres
