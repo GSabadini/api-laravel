@@ -2,7 +2,7 @@
 
 namespace App\Domains\User;
 
-//use App\Domains\Uuid as UuidTrait;
+use App\Domains\Uuid as UuidTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 

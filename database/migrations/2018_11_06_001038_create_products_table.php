@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('image');
-            $table->integer('price');
+            $table->float('price');
 
             $table->uuid('category_id');
             $table->foreign('category_id', 'fk_category')

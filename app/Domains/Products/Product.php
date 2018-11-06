@@ -2,6 +2,9 @@
 
 namespace App\Domains\Product;
 
+use App\Domains\Category\Category;
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class Product
  * @package App\Domains\Product
@@ -12,7 +15,7 @@ namespace App\Domains\Product;
  * @property integer $price
  * @property string $category_id
  */
-class Product
+class Product extends Model
 {
     protected $table = 'products';
 
@@ -23,4 +26,9 @@ class Product
         'price',
         'category_id',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }
