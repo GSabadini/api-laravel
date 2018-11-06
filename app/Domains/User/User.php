@@ -17,7 +17,8 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
-//    use UuidTrait;
+    use UuidTrait;
+    public $incrementing = false;
 
     protected $table = 'users';
 

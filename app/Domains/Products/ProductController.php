@@ -2,9 +2,9 @@
 
 namespace App\Domains\Product;
 
-use App\Domains\User\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 
 /**
  * Class ProductController
@@ -22,28 +22,50 @@ class ProductController extends Controller
         $this->service = new ProductService();
     }
 
+    /**
+     * @return ResponseFactory|Response
+     */
     public function index()
     {
-        $products = User::paginate(15);
+        $products = Product::paginate(15);
 
         return response($products);
     }
 
+    /**
+     * @param Product $product
+     * @return ResponseFactory|Response
+     */
     public function show(Product $product)
     {
         return response($product);
     }
 
+
     public function store(ProductRequest $request)
     {
+        $response = $this
+            ->service
+            ->store($request);
 
+        return response($response, 201);
     }
+
 
     public function update(Product $product, ProductRequest $request)
     {
+        $response = $this
+            ->service
+            ->update($product, $request);
 
+        return response($response);
     }
 
+    /**
+     * @param Product $product
+     * @return ResponseFactory|Response
+     * @throws \Exception
+     */
     public function destroy(Product $product)
     {
         $product->delete();

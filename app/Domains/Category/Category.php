@@ -2,18 +2,20 @@
 
 namespace App\Domains\Category;
 
-use App\Domains\Product\Product;
 use App\Domains\Uuid as UuidTrait;
+use App\Domains\Product\Product;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Category
  * @package App\Domains\Category
- * @property $string $name
+ * @property string $id
+ * @property string $name
  */
 class Category extends Model
 {
-//    use UuidTrait;
+    use UuidTrait;
+    public $incrementing = false;
 
     protected $table = 'categories';
 
