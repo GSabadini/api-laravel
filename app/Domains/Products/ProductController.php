@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Domains\Product;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+/**
+ * Class ProductController
+ */
+class ProductController extends Controller
+{
+//    protected $service;
+//
+//    /**
+//     * ProductController constructor.
+//     */
+//    public function __construct()
+//    {
+//        $this->service = new ProductService();
+//    }
+
+    public function index(Request $request)
+    {
+
+    }
+
+    public function show(Product $product)
+    {
+        return response($product);
+    }
+
+    public function store(ProductRequest $request)
+    {
+
+    }
+
+    public function update(Product $product, ProductRequest $request)
+    {
+
+    }
+
+    public function destroy(Product $product)
+    {
+        $product->delete();
+
+        return response($product, 204);
+    }
+}
