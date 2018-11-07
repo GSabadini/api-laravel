@@ -3,13 +3,10 @@
 namespace Tests\Feature;
 
 use App\Domains\User\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class AuthControllerTest extends TestCase
 {
-    use DatabaseMigrations;
-
     private $endpoint = 'api/auth';
 
     public function testShouldLoginWithUser()
@@ -24,7 +21,6 @@ class AuthControllerTest extends TestCase
 
         $response = $this->post($this->endpoint, $payload);
 
-        dd($response->decodeResponseJson());
         $response
             ->assertStatus(200);
     }

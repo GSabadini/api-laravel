@@ -5,6 +5,7 @@ namespace App\Domains\User;
 use App\Domains\Uuid as UuidTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * Class User
@@ -14,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $email
  * @property string $password
  */
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
     use UuidTrait;

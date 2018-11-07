@@ -3,13 +3,10 @@
 namespace Tests\Feature;
 
 use App\Domains\Category\Category;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class CategoryControllerTest extends TestCase
 {
-    use DatabaseMigrations;
-
     private $endpoint = 'api/categories';
 
     public function testShouldGetCategoryList()
@@ -19,7 +16,7 @@ class CategoryControllerTest extends TestCase
             ->create()
             ->toArray();
 
-        $response = $this->get($this->endpoint);
+        $response = $this->json('GET', $this->endpoint);
 
         $response
             ->assertStatus(200)

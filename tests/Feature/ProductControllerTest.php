@@ -3,14 +3,29 @@
 namespace Tests\Feature;
 
 use App\Domains\Product\Product;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class ProductControllerTest extends TestCase
 {
-    use DatabaseMigrations;
-
     private $endpoint = 'api/products';
+
+    public function testShouldGetProductsList()
+    {
+        /** @var Product $products */
+        $products = factory(Product::class, 10)->create();
+
+        $structureProducts = $this->returnStructureProducts($products->first());
+
+        $response = $this->json('GET', $this->endpoint);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson($structureProducts);
+
+        $responseData = json_decode($response->getContent())->data;
+
+        $this->assertCount(10, $responseData);
+    }
 
     /**
      * @param Product $product
@@ -31,24 +46,6 @@ class ProductControllerTest extends TestCase
         ];
     }
 
-    public function testShouldGetProductsList()
-    {
-        /** @var Product $products */
-        $products = factory(Product::class, 10)->create();
-
-        $structureProducts = $this->returnStructureProducts($products->first());
-
-        $response = $this->get($this->endpoint);
-
-        $response
-            ->assertStatus(200)
-            ->assertJson($structureProducts);
-
-        $responseData = json_decode($response->getContent())->data;
-
-        $this->assertCount(10, $responseData);
-    }
-
     public function testShouldGetProductById()
     {
         /** @var Product $product */
@@ -58,7 +55,7 @@ class ProductControllerTest extends TestCase
 
         $uri = sprintf('%s/%s', $this->endpoint, $product->id);
 
-        $response = $this->get($uri);
+        $response = $this->json('GET', $uri);
 
         $response
             ->assertStatus(200)
@@ -72,7 +69,7 @@ class ProductControllerTest extends TestCase
             ->make()
             ->toArray();
 
-        $response = $this->post($this->endpoint, $product);
+        $response = $this->json('POST', $this->endpoint, $product);
 
         $response
             ->assertStatus(201)
@@ -91,7 +88,7 @@ class ProductControllerTest extends TestCase
 
         $uri = sprintf('%s/%s', $this->endpoint, $product->id);
 
-        $response = $this->put($uri, $productEdit);
+        $response = $this->json('PUT', $uri, $productEdit);
         $response
             ->assertStatus(200)
             ->assertJson($productEdit);
@@ -104,7 +101,7 @@ class ProductControllerTest extends TestCase
 
         $uri = sprintf('%s/%s', $this->endpoint, $product->id);
 
-        $response = $this->delete($uri);
+        $response = $this->json('DELETE', $uri);
 
         $response->assertStatus(204);
 
