@@ -2,8 +2,10 @@
 
 namespace App\Domains\Auth;
 
+use App\Domains\User\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
  * Class AuthController
@@ -11,8 +13,21 @@ use Illuminate\Http\Request;
  */
 class AuthController extends Controller
 {
-    public function authenticate(Request $request)
+    /**
+     * @param AuthRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function authenticate(AuthRequest $request)
     {
-        dd($request->email);
+        $user = User::where('email', $request->email)->first();
+
+        $credentials = $request->only('email', 'password');
+        dd(JWTAuth::attempt($credentials));
+
+        if (!Hash::check($request->password, $user->password) && md5($request->password) != $user->password) {
+            return response()->json(['error' => 'invalid_credentials'], 401);
+        }
+
+        return response()->json(compact('token', 'user'));
     }
 }
