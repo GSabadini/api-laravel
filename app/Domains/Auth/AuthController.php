@@ -2,10 +2,10 @@
 
 namespace App\Domains\Auth;
 
-use App\Domains\User\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use JWTAuth;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
 
 /**
  * Class AuthController
@@ -13,24 +13,28 @@ use JWTAuth;
  */
 class AuthController extends Controller
 {
+    private $service;
+
+    public function __construct()
+    {
+        $this->service = new AuthService();
+    }
+
     /**
      * @param AuthRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return ResponseFactory|Response
      */
     public function authenticate(AuthRequest $request)
     {
-        $email = $request->email;
-        $password = $request->password;
+        try {
+            $email = $request->email;
+            $password = $request->password;
 
-        $user = User::where('email', $email)->first();
-
-
-        if (!Hash::check($password, $user->password) && md5($password) != $user->password) {
+            return $this
+                ->service
+                ->authenticate($email, $password);
+        } catch (ModelNotFoundException $exception) {
             return response()->json(['error' => 'invalid_credentials'], 401);
         }
-
-        $token = JWTAuth::fromUser($user);
-
-        return response()->json(compact('token', 'user'));
     }
 }

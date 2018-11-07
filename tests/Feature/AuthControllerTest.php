@@ -9,7 +9,7 @@ class AuthControllerTest extends TestCase
 {
     private $endpoint = 'api/auth';
 
-    public function testShouldLoginWithUser()
+    public function testShouldLoginWithCredentialsValid()
     {
         /** @var User $user */
         $user = factory(User::class)->create();
@@ -20,8 +20,30 @@ class AuthControllerTest extends TestCase
         ];
 
         $response = $this->post($this->endpoint, $payload);
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'token',
+                'user',
+            ]);
+    }
+
+    public function testShouldFailedWithCredentialsInvalid()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        $payload = [
+            'email' => $user->email,
+            'password' => 'invalid',
+        ];
+
+        $response = $this->post($this->endpoint, $payload);
 
         $response
-            ->assertStatus(200);
+            ->assertStatus(401)
+            ->assertJson([
+                'error' => 'invalid_credentials',
+            ]);
     }
 }
