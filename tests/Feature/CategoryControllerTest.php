@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class CategoryControllerTest extends TestCase
 {
-    private $endpoint = 'api/categories';
+    private $endpoint = 'api/backoffice/categories';
 
     public function testShouldGetCategoryList()
     {

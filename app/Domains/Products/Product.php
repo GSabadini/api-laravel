@@ -5,6 +5,7 @@ namespace App\Domains\Product;
 use App\Domains\Category\Category;
 use App\Domains\Uuid as UuidTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Product
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use UuidTrait;
+    use SoftDeletes;
     public $incrementing = false;
     protected $table = 'products';
 

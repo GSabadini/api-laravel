@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class ProductControllerTest extends TestCase
 {
-    private $endpoint = 'api/products';
+    private $endpoint = 'api/backoffice/products';
 
     public function testShouldGetProductsList()
     {

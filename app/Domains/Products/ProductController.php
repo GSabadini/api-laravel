@@ -27,7 +27,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate(15);
+        $products = Product
+            ::with('category')
+            ->paginate(15);
 
         return response($products);
     }
@@ -41,7 +43,10 @@ class ProductController extends Controller
         return response($product);
     }
 
-
+    /**
+     * @param ProductRequest $request
+     * @return ResponseFactory|Response
+     */
     public function store(ProductRequest $request)
     {
         $response = $this
@@ -51,7 +56,11 @@ class ProductController extends Controller
         return response($response, 201);
     }
 
-
+    /**
+     * @param Product $product
+     * @param ProductRequest $request
+     * @return ResponseFactory|Response
+     */
     public function update(Product $product, ProductRequest $request)
     {
         $response = $this
