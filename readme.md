@@ -31,7 +31,7 @@ create .env through env.example
 ```
 
 ```
-php artisan migrate db --seed
+php artisan migrate --seed
 ```
 
 ## Running the tests
