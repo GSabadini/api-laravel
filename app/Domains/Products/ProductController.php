@@ -83,15 +83,4 @@ class ProductController extends Controller
 
         return response($product, 204);
     }
-
-    public function upĺoadCsv(Request $request)
-    {
-        dd($request->all());
-    }
-
-    public function readCsv()
-    {
-        $this->service->readCsv();
-    }
-
 }

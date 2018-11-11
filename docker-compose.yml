@@ -24,11 +24,3 @@ services:
     ports:
       - '8081:8080'
 
-  # queue:
-  #   image: 'carlosfiori/php7.1-nginx'
-  #   restart: always
-  #   command: php artisan queue:work --tries=5
-  #   volumes:
-  #     - './:/var/www/app'
-  #   links:
-  #     - postgres

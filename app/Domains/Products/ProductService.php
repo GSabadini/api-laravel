@@ -2,14 +2,10 @@
 
 namespace App\Domains\Product;
 
-use App\Domains\Category\Category;
-use App\Domains\Category\CategoryService;
-use App\Domains\Products\ProductFilter;
 use Carbon\Carbon;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use League\Csv\Reader;
 
 /**
  * Class ProductService
@@ -47,12 +43,11 @@ class ProductService
 
         if ($search) {
             $valueSearch = '%' . $search . '%';
-            $product = Product
-                ::where('name', 'like', $valueSearch)
+
+            return Product
+                ::orWhere('name', 'like', $valueSearch)
                 ->with('category')
                 ->paginate(10);
-
-            return $product;
         }
 
         return Product
@@ -109,38 +104,4 @@ class ProductService
 
         return $fileName;
     }
-
-    public function readCsv()
-    {
-        $file = Reader::createFromPath('../public/csv/example.csv', 'r');
-        $sizeFile = count($file);
-
-        for ($x = 1; $x < $sizeFile; $x++) {
-            $header[$x] = $file->fetchOne($x);
-            $name = $header[$x][0];
-            $description = $header[$x][1];
-            $categoryName = $header[$x][2];
-            $price = $header[$x][3];
-
-            $product = new Product();
-            $product->name = $name;
-            $product->description = $description;
-            $product->price = $price;
-            $getCategory = Category::where('name', $categoryName)->first();
-
-            if (!$getCategory) {
-                $categoryService = new CategoryService();
-                $category = $categoryService->store($categoryName);
-                $product->category_id = $category->id;
-            } else {
-                $product->category_id = $getCategory->id;
-            }
-
-
-            $product->save();
-        }
-
-        return $product;
-    }
-
 }

@@ -27,6 +27,29 @@ class ProductControllerTest extends TestCase
         $this->assertCount(10, $responseData);
     }
 
+    public function testShouldGetProductByName()
+    {
+        factory(Product::class, 5)->create();
+
+        /** @var Product $productName */
+        $productName = factory(Product::class)
+            ->create(['name' => 'DevSquad']);
+
+        $structureProducts = $this->returnStructureProducts($productName);
+
+        $uri = sprintf(
+            '%s?page=1&search=%s',
+            $this->endpoint,
+            $productName->name
+        );
+
+        $response = $this->json('GET', $uri);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson($structureProducts);
+    }
+
     /**
      * @param Product $product
      * @return array
