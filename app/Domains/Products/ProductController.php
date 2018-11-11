@@ -4,6 +4,7 @@ namespace App\Domains\Product;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -23,15 +24,16 @@ class ProductController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return ResponseFactory|Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product
-            ::with('category')
-            ->paginate(15);
+        $response = $this
+            ->service
+            ->index($request);
 
-        return response($products);
+        return response($response);
     }
 
     /**
@@ -81,4 +83,15 @@ class ProductController extends Controller
 
         return response($product, 204);
     }
+
+    public function upĺoadCsv(Request $request)
+    {
+        dd($request->all());
+    }
+
+    public function readCsv()
+    {
+        $this->service->readCsv();
+    }
+
 }

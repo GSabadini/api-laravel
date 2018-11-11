@@ -2,7 +2,14 @@
 
 namespace App\Domains\Product;
 
+use App\Domains\Category\Category;
+use App\Domains\Category\CategoryService;
+use App\Domains\Products\ProductFilter;
 use Carbon\Carbon;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use League\Csv\Reader;
 
 /**
  * Class ProductService
@@ -11,23 +18,57 @@ use Carbon\Carbon;
 class ProductService
 {
     /**
+     * @param Product $product
+     * @param $data
+     * @return Product
+     */
+    public function fill(Product $product, $data)
+    {
+        $fileName = $this->makePathImage($data['image']);
+
+        $product->name = $data['name'];
+        $product->description = $data['description'];
+        $product->image = $fileName;
+        $product->price = $data['price'];
+        $product->category_id = $data['category_id'];
+
+        $product->save();
+
+        return $product;
+    }
+
+    /**
+     * @param Request $request
+     * @return ResponseFactory|Response
+     */
+    public function index(Request $request)
+    {
+        $search = $request->search;
+
+        if ($search) {
+            $valueSearch = '%' . $search . '%';
+            $product = Product
+                ::where('name', 'like', $valueSearch)
+                ->with('category')
+                ->paginate(10);
+
+            return $product;
+        }
+
+        return Product
+            ::with('category')
+            ->paginate(10);
+    }
+
+    /**
      * @param ProductRequest $request
      * @return Product
      */
     public function store(ProductRequest $request)
     {
-        $fileName = $this->makePathImage($request->image);
-
         $product = new Product();
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->image = $fileName;
-        $product->price = $request->price;
-        $product->category_id = $request->category_id;
 
-        $product->save();
-
-        return $product;
+        return $this->fill($product, $request->all());
     }
 
     /**
@@ -37,17 +78,7 @@ class ProductService
      */
     public function update(Product $product, ProductRequest $request)
     {
-        $fileName = $this->makePathImage($request->image);
-
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->image = $fileName;
-        $product->price = $request->price;
-        $product->category_id = $request->category_id;
-
-        $product->save();
-
-        return $product;
+        return $this->fill($product, $request);
     }
 
     /**
@@ -77,6 +108,39 @@ class ProductService
         file_put_contents($path, $decoded);
 
         return $fileName;
+    }
+
+    public function readCsv()
+    {
+        $file = Reader::createFromPath('../public/csv/example.csv', 'r');
+        $sizeFile = count($file);
+
+        for ($x = 1; $x < $sizeFile; $x++) {
+            $header[$x] = $file->fetchOne($x);
+            $name = $header[$x][0];
+            $description = $header[$x][1];
+            $categoryName = $header[$x][2];
+            $price = $header[$x][3];
+
+            $product = new Product();
+            $product->name = $name;
+            $product->description = $description;
+            $product->price = $price;
+            $getCategory = Category::where('name', $categoryName)->first();
+
+            if (!$getCategory) {
+                $categoryService = new CategoryService();
+                $category = $categoryService->store($categoryName);
+                $product->category_id = $category->id;
+            } else {
+                $product->category_id = $getCategory->id;
+            }
+
+
+            $product->save();
+        }
+
+        return $product;
     }
 
 }

@@ -4,6 +4,8 @@ namespace App\Domains\Category;
 
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 
 /**
  * Class CategoryController
@@ -11,6 +13,10 @@ use App\Http\Controllers\Controller;
  */
 class CategoryController extends Controller
 {
+    /**
+     * @return ResponseFactory|Response
+     */
+
     public function index()
     {
         $categories = Category::all();
