@@ -82,6 +82,12 @@ class ProductService
      */
     public function makePathImage($image)
     {
+        $uriImage = explode('/', $image);
+
+        if ($uriImage[2] === 'localhost:8081') {
+            return $uriImage[4];
+        }
+
         $exploded = explode(',', $image);
 
         if (count($exploded) === 1) {
