@@ -104,7 +104,7 @@ class ProductService
 
         $date = Carbon::now()->toDateString();
         $fileName = sprintf('%s%s.%s', str_random(), $date, $extension);
-        $path = sprintf('%s/%s/%s', public_path(), 'products', $fileName);
+        $path = sprintf('%s/%s/%s', storage_path(), 'products', $fileName);
 
         file_put_contents($path, $decoded);
 
