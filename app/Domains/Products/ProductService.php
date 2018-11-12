@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Class ProductService
@@ -83,6 +82,13 @@ class ProductService
      */
     public function makePathImage($image)
     {
+        $nameFolder = sprintf('%s/%s', public_path(), 'products');
+        $folderExist = file_exists($nameFolder);
+
+        if (!$folderExist) {
+            $createFolder = mkdir($nameFolder);
+        }
+
         $uriImage = explode('/', $image);
 
         if ($uriImage[2] === 'localhost:8081') {
