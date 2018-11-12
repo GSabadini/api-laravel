@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class ProductService
@@ -104,7 +105,7 @@ class ProductService
 
         $date = Carbon::now()->toDateString();
         $fileName = sprintf('%s%s.%s', str_random(), $date, $extension);
-        $path = sprintf('%s/%s/%s', storage_path(), 'products', $fileName);
+        $path = sprintf('%s/%s/%s', public_path(), 'products', $fileName);
 
         file_put_contents($path, $decoded);
 
