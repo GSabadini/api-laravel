@@ -81,6 +81,6 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        return response($product, 204);
+        return response(null, 204);
     }
 }
