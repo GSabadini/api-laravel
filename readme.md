@@ -31,6 +31,10 @@ create .env through env.example
 ```
 
 ```
+create folder 'products' in folder 'public'
+```
+
+```
 php artisan migrate --seed
 ```
 
