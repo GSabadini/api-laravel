@@ -4,7 +4,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Client repository
 
-https://github.com/GSabadini/client-vue-auth
+https://github.com/GSabadini/client-vue-crud-customers
 
 ### Prerequisites
 
