@@ -1,7 +1,7 @@
 
 ## Client repository
 
-https://github.com/GSabadini/client-vue-crud-customers
+https://github.com/GSabadini/client-vue-auth
 
 ## Getting Started
 
