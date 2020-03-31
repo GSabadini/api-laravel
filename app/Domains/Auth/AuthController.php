@@ -13,16 +13,19 @@ use Illuminate\Http\Response;
  */
 class AuthController extends Controller
 {
+    /**
+     * @var AuthService
+     */
     private $service;
 
-    public function __construct()
+    public function __construct(AuthService $service)
     {
-        $this->service = new AuthService();
+        $this->service = $service;
     }
 
     /**
      * @param AuthRequest $request
-     * @return ResponseFactory|Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function authenticate(AuthRequest $request)
     {

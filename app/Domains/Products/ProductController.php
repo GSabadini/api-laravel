@@ -13,14 +13,17 @@ use Illuminate\Http\Response;
  */
 class ProductController extends Controller
 {
+    /**
+     * @var ProductService
+     */
     protected $service;
 
     /**
      * ProductController constructor.
      */
-    public function __construct()
+    public function __construct(ProductService $service)
     {
-        $this->service = new ProductService();
+        $this->service = $service;
     }
 
     /**
