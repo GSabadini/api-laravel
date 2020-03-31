@@ -2,7 +2,7 @@
 
 ## Client repository
 
-[Vue Auth](https://github.com/GSabadini/vue-auth)
+- [Vue Auth](https://github.com/GSabadini/vue-auth)
 
 ## Getting Started
 
